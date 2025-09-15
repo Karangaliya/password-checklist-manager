@@ -1,7 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "../constants";
 import { LocalStorage_Key } from "./localStorage";
 import toast from "react-hot-toast";
+import { BASE_URL } from "../config";
 
 const Axios = axios.create({
   baseURL: BASE_URL, 
@@ -12,7 +12,7 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
   (req) => {
     const token = JSON.parse(localStorage.getItem(LocalStorage_Key?.token || ""));
-    req?.headers = {
+    req.headers = {
         ...req?.headers,
         Authorization: `Bearer ${token}`,
     }
