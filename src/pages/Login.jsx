@@ -1,6 +1,21 @@
 import { useState } from "react";
 import axios from "axios";
 import CustomButton from "../component/CustomButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+  Divider,
+} from "@mui/material";
+import { Google, Apple } from "@mui/icons-material";
 // import { useNavigate } from "react-router";
 // import { useDispatch } from "react-redux";
 // import { signInSuccess } from "../../Redux/user/userSlice";
@@ -76,206 +91,423 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen px-4 sm:px-6 md:px-12 py-12 bg-[#8B7B9B]">
+    <div className="min-h-screen px-4 sm:px-6 md:px-32 py-12 bg-[#8B7B9B] flex justify-center items-center">
       <div className="flex flex-col md:flex-row bg-[#292433] relative gap-10 w-full h-auto md:h-[85vh] rounded-lg overflow-hidden shadow-xl ">
-        {/* Sign In Section */}
         <div
           className={`w-full md:w-[50%] h-full px-8 rounded-lg transition-opacity duration-700
                     ${
                       !isMoved ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
         >
-          <div className="w-full h-full flex flex-col gap-6 justify-center">
-            <h2 className="text-[#254A74] text-2xl sm:text-3xl font-bold text-center">
-              Sign In
-            </h2>
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <InputField
-                label="Email:"
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <InputField
-                label="Password:"
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="w-full bg-[#1b3453] text-white p-4 rounded-lg mt-4 hover:hover:bg-[#254A74] focus:outline-none focus:ring-2 focus:ring-teal-300 transition duration-200 ease-in-out"
-                disabled={loading}
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              gap: 4,
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: "0 70px",
+            }}
+          >
+            <Box>
+              <Typography
+                fontWeight={600}
+                sx={{ mb: 1, color: "white", fontSize: "44px" }}
               >
-                {loading ? "Loading..." : "Sign In"}
-              </button>
-            </form>
-            {error && <div className="text-red-500 mt-2">{error}</div>}
-          </div>
+                Glad to see you again!
+              </Typography>
+              <Typography sx={{ color: "#aaa", fontSize: "14px" }}>
+                Sign in to catch up with what’s new.
+              </Typography>
+            </Box>
+            <Box>
+              <TextField
+                label="Email"
+                type="email"
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ style: { color: "#aaa" } }}
+                sx={{
+                  mb: 2,
+                  input: { color: "#fff" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "#888" },
+                    "&:hover fieldset": { borderColor: "#aaa" },
+                    "&.Mui-focused fieldset": { borderColor: "#888" },
+                  },
+                }}
+              />
+              <TextField
+                label="Enter your password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ style: { color: "#aaa" } }}
+                sx={{
+                  mb: 2,
+                  input: { color: "#fff" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "#888" },
+                    "&:hover fieldset": { borderColor: "#aaa" },
+                    "&.Mui-focused fieldset": { borderColor: "#888" },
+                  },
+                }}
+              />
+              <FormControlLabel
+                control={<Checkbox sx={{ color: "#888" }} />}
+                label={
+                  <Typography variant="body2" sx={{ color: "gray" }}>
+                    I agree to the{" "}
+                    <Link href="#" color="secondary" underline="hover">
+                      Terms & Conditions
+                    </Link>
+                  </Typography>
+                }
+                sx={{ mb: 2 }}
+              />
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{
+                  backgroundColor: "#8b5cf6",
+                  color: "#fff",
+                  py: 1.4,
+                  fontWeight: 600,
+                  borderRadius: "8px",
+                  mb: 3,
+                  "&:hover": { backgroundColor: "#7c3aed" },
+                }}
+              >
+                Login
+              </Button>
+              <Divider
+                sx={{
+                  borderColor: "gray",
+                  color: "gray",
+                  mb: 3,
+                  fontSize: "12px",
+                  "&::before, &::after": {
+                    borderColor: "gray",
+                  },
+                }}
+              >
+                Or Login/Register with
+              </Divider>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  justifyContent: "space-between",
+                }}
+              >
+                <CustomButton
+                  icon={
+                    <img
+                      src="/assets/google-icon.svg"
+                      alt="Google"
+                      className="w-[20px]"
+                    />
+                  }
+                  backgroundColor="transparent"
+                  textColor="white"
+                  buttonTitle="Google"
+                  iconForward={true}
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    textTransform: "none",
+                    borderRadius: "none",
+                    border: "1px solid #555",
+                    gap: "10px",
+                    "&:hover": { borderColor: "#888" },
+                  }}
+                />
+                <CustomButton
+                  icon={<Apple />}
+                  backgroundColor="transparent"
+                  textColor="white"
+                  buttonTitle="Apple"
+                  iconForward={true}
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    textTransform: "none",
+                    borderRadius: "none",
+                    border: "1px solid #555",
+                    gap: "10px",
+                    "&:hover": { borderColor: "#888" },
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
         </div>
-
-        {/* Sign Up Section */}
         <div
           className={`overflow-y-auto w-full md:w-[50%] h-full px-8 py-9 rounded-lg transition-opacity duration-700 custom-scrollbar
                     ${
                       isMoved ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
         >
-          <div className="w-full h-full flex flex-col gap-6">
-            <h2 className="text-[#254A74] text-2xl sm:text-3xl font-bold text-center">
-              Sign Up
-            </h2>
-            {/* User Type Selection */}
-            <div className="flex justify-center gap-4 mb-6">
-              <button
-                onClick={() => setIsJobSeeker(true)}
-                className={`px-4 py-2 rounded-lg ${
-                  isJobSeeker ? "bg-[#1b3453]" : "bg-[#3b72b0]"
-                } text-white`}
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              gap: 4,
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: "0 70px",
+            }}
+          >
+            <Box>
+              <Typography
+                fontWeight={600}
+                sx={{ mb: 1, color: "white", fontSize: "44px" }}
               >
-                Job Seeker
-              </button>
-              <button
-                onClick={() => setIsJobSeeker(false)}
-                className={`px-4 py-2 rounded-lg ${
-                  !isJobSeeker ? "bg-[#1b3453]" : "bg-[#3b72b0]"
-                } text-white`}
+                Create an account
+              </Typography>
+              <Typography sx={{ color: "#aaa", fontSize: "14px" }}>
+                Join us today and get started in just a few steps..
+              </Typography>
+            </Box>
+            <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1.5,
+                }}
               >
-                Company
-              </button>
-            </div>
-
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <InputField
-                label="Email:"
+                <TextField
+                  label="First name"
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{ style: { color: "#aaa" } }}
+                  sx={{
+                    mb: 2,
+                    input: { color: "#fff" },
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "#888" },
+                      "&:hover fieldset": { borderColor: "#aaa" },
+                      "&.Mui-focused fieldset": { borderColor: "#888" },
+                    },
+                  }}
+                />
+                <TextField
+                  label="Last name"
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{ style: { color: "#aaa" } }}
+                  sx={{
+                    mb: 2,
+                    input: { color: "#fff" },
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "#888" },
+                      "&:hover fieldset": { borderColor: "#aaa" },
+                      "&.Mui-focused fieldset": { borderColor: "#888" },
+                    },
+                  }}
+                />
+              </Box>
+              <TextField
+                label="Email"
                 type="email"
-                id="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {isJobSeeker ? (
-                <InputField
-                  label="Username:"
-                  type="text"
-                  id="username"
-                  placeholder="Enter your username"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              ) : (
-                <InputField
-                  label="Company Name:"
-                  type="text"
-                  id="companyName"
-                  placeholder="Enter your company name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              )}
-              <InputField
-                label="Contact No:"
-                type="text"
-                id="contactno"
-                placeholder="Enter your contact no"
-                value={contact_no}
-                onChange={(e) => setContactno(e.target.value)}
-              />
-              <InputField
-                label="Password:"
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="w-full bg-[#1b3453] text-white p-4 rounded-lg mt-4 hover:hover:bg-[#254A74] focus:outline-none focus:ring-2 focus:ring-teal-300 transition duration-200 ease-in-out"
-                disabled={loading}
-              >
-                {loading
-                  ? "Loading..."
-                  : isJobSeeker
-                  ? "Register as Job Seeker"
-                  : "Register as Company"}
-              </button>
-            </form>
-            {error && <div className="text-red-500 mt-2">{error}</div>}
-          </div>
-        </div>
-
-        {/* Transition Section */}
-        <div
-          className={`bg-[url('https://images.hdqwalls.com/download/mac-os-mojave-5k-np-1920x1200.jpg')] 
-              bg-cover bg-center 
-              w-full md:w-[40%] h-[96%] my-[16px] absolute top-0 md:right-[40%] 
-              duration-1000 ease-in-out transform
-              ${isMoved ? "translate-x-[-48%]" : "translate-x-[98%]"}`}
-        >
-          {isMoved ? (
-            <div className="px-8 flex flex-col gap-5 items-center justify-center h-full text-white transition-all duration-1000 ease-in-out">
-              <p className="text-xl sm:text-2xl font-bold">Welcome Back</p>
-              <p className="text=sm sm:text-sm">
-                Welcome back! Continue your journey to find your dream job or
-                the perfect candidate for your team.
-              </p>
-              <CustomButton
-                handleRedirect={handleClick}
-                backgroundColor="transparent"
-                buttonTitle="Back to Login"
-              />
-            </div>
-          ) : (
-            <div className="px-8 flex flex-col gap-5 items-center justify-center h-full text-white transition-all duration-1000 ease-in-out">
-              <p className="text-xl sm:text-2xl font-bold">
-                Start New Journey, With Us!
-              </p>
-              <p className="text-sm sm:text-base">
-                Connecting talent with opportunities! Sign up to find your dream
-                job or hire the best professionals for your company.
-              </p>
-              <CustomButton
-                handleRedirect={handleClick}
-                backgroundColor="transparent"
-                buttonTitle="Back to Register"
-                style={{
-                  border: "1px solid #fff",
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ style: { color: "#aaa" } }}
+                sx={{
+                  mb: 2,
+                  input: { color: "#fff" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "#888" },
+                    "&:hover fieldset": { borderColor: "#aaa" },
+                    "&.Mui-focused fieldset": { borderColor: "#888" },
+                  },
                 }}
               />
+              <TextField
+                label="Enter your password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ style: { color: "#aaa" } }}
+                sx={{
+                  mb: 2,
+                  input: { color: "#fff" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "#888" },
+                    "&:hover fieldset": { borderColor: "#aaa" },
+                    "&.Mui-focused fieldset": { borderColor: "#888" },
+                  },
+                }}
+              />
+              <FormControlLabel
+                control={<Checkbox sx={{ color: "#888" }} />}
+                label={
+                  <Typography variant="body2" sx={{ color: "gray" }}>
+                    I agree to the{" "}
+                    <Link href="#" color="secondary" underline="hover">
+                      Terms & Conditions
+                    </Link>
+                  </Typography>
+                }
+                sx={{ mb: 2 }}
+              />
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{
+                  backgroundColor: "#8b5cf6",
+                  color: "#fff",
+                  py: 1.4,
+                  fontWeight: 600,
+                  borderRadius: "8px",
+                  mb: 3,
+                  "&:hover": { backgroundColor: "#7c3aed" },
+                }}
+              >
+                Create account
+              </Button>
+              <Divider
+                sx={{
+                  borderColor: "gray",
+                  color: "gray",
+                  mb: 3,
+                  fontSize: "12px",
+                  "&::before, &::after": {
+                    borderColor: "gray",
+                  },
+                }}
+              >
+                Or register with
+              </Divider>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  justifyContent: "space-between",
+                }}
+              >
+                <CustomButton
+                  icon={
+                    <img
+                      src="/assets/google-icon.svg"
+                      alt="Google"
+                      className="w-[20px]"
+                    />
+                  }
+                  backgroundColor="transparent"
+                  textColor="white"
+                  buttonTitle="Google"
+                  iconForward={true}
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    textTransform: "none",
+                    borderRadius: "none",
+                    border: "1px solid #555",
+                    gap: "10px",
+                    "&:hover": { borderColor: "#888" },
+                  }}
+                />
+                <CustomButton
+                  icon={<Apple />}
+                  backgroundColor="transparent"
+                  textColor="white"
+                  buttonTitle="Apple"
+                  iconForward={true}
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    textTransform: "none",
+                    borderRadius: "none",
+                    border: "1px solid #555",
+                    gap: "10px",
+                    "&:hover": { borderColor: "#888" },
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </div>
+        <div
+          className={`bg-[url('https://images.hdqwalls.com/download/mac-os-mojave-5k-np-1920x1200.jpg')] 
+                      bg-cover bg-center rounded-lg
+                      w-full md:w-[50%] h-[96%] my-[16px] absolute top-0 md:right-[40%] 
+                      duration-1000 ease-in-out transform
+                      ${isMoved ? "translate-x-[-18%]" : "translate-x-[78%]"}`}
+        >
+          <div className="relative w-full h-full">
+            <div
+              className={`absolute inset-0 px-8 py-5 flex flex-col justify-between gap-2 text-white
+                        transition-all duration-700 ease-in-out
+                        ${
+                          isMoved
+                            ? "opacity-100 translate-x-0"
+                            : "opacity-0 -translate-x-10 pointer-events-none"
+                        }`}
+            >
+              <div className="flex justify-between items-start w-full">
+                <img src="/assets/logo.svg" alt="Logo" className="w-[60px]" />
+                <CustomButton
+                  handleRedirect={handleClick}
+                  backgroundColor="transparent"
+                  buttonTitle="Back to Login"
+                  style={{
+                    border: "1px solid #fff",
+                    fontSize: "12px",
+                    padding: "5px 15px",
+                    width: "fit-content",
+                  }}
+                  iconForward={false}
+                  icon={<ArrowForwardIcon />}
+                />
+              </div>
+              <div>
+                <p className="text-xl sm:text-2xl font-bold">Welcome Back</p>
+                <p className="text-sm sm:text-base">
+                  Welcome back! Continue your journey to find your dream job or
+                  the perfect candidate for your team.
+                </p>
+              </div>
             </div>
-          )}
-          {/* <img
-            src="https://images.hdqwalls.com/download/mac-os-mojave-5k-np-1920x1200.jpg"
-            alt=""
-          /> */}
+            <div
+              className={`absolute inset-0 px-8 py-5 flex flex-col justify-between gap-2 text-white
+                      transition-all duration-700 ease-in-out
+                      ${
+                        !isMoved
+                          ? "opacity-100 translate-x-0"
+                          : "opacity-0 translate-x-10 pointer-events-none"
+                      }`}
+            >
+              <div className="flex justify-between items-start w-full">
+                <CustomButton
+                  handleRedirect={handleClick}
+                  backgroundColor="transparent"
+                  buttonTitle="Back to Register"
+                  style={{
+                    border: "1px solid #fff",
+                    fontSize: "12px",
+                    padding: "5px 15px",
+                    width: "fit-content",
+                  }}
+                  iconForward={true}
+                  icon={<ArrowBackIcon />}
+                />
+                <img src="/assets/logo.svg" alt="Logo" className="w-[60px]" />
+              </div>
+              <div>
+                <p className="text-xl sm:text-2xl font-bold">
+                  Start New Journey, With Us!
+                </p>
+                <p className="text-sm sm:text-base">
+                  Connecting talent with opportunities! Sign up to find your
+                  dream job or hire the best professionals for your company.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-function InputField({ label, type, id, placeholder, value, onChange }) {
-  return (
-    <div className="flex flex-col gap-3">
-      <label htmlFor={id} className="text-[#254A74] font-medium">
-        {label}
-      </label>
-      <input
-        id={id}
-        type={type}
-        className="p-4 bg-transparent border-b-2 border-[#254A74] focus:outline-none transition duration-200 ease-in-out text-[#254A74] placeholder:text-blue-900"
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        required
-      />
-    </div>
-  );
-}
-
 export default Login;
