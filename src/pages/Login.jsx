@@ -1,93 +1,66 @@
 import { useState } from "react";
-import axios from "axios";
-import CustomButton from "../component/CustomButton";
+import CustomButton from "../core/component/CustomButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {
   Box,
   Button,
   Checkbox,
-  Container,
   FormControlLabel,
-  Grid,
   Link,
   TextField,
   Typography,
   Divider,
 } from "@mui/material";
-import { Google, Apple } from "@mui/icons-material";
-// import { useNavigate } from "react-router";
-// import { useDispatch } from "react-redux";
-// import { signInSuccess } from "../../Redux/user/userSlice";
-// import { toast } from "react-toastify";
+import { loginSchema } from "../core/validations/login.schema";
+import { registerSchema } from "../core/validations/registration.schema";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 function Login() {
   const [isMoved, setIsMoved] = useState(false);
-  const [isJobSeeker, setIsJobSeeker] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [error, setError] = useState("");
-  const [contact_no, setContactno] = useState("");
   const [loading, setLoading] = useState(false);
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const {
+    register: loginRegister,
+    handleSubmit: handleLoginSubmit,
+    formState: { errors: loginErrors },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+    mode: "all",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    reValidateMode: "all",
+  });
+
+  const {
+    register: regRegister,
+    handleSubmit: handleRegisterSubmit,
+    formState: { errors: regErrors },
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      terms: false,
+    },
+    reValidateMode: "all",
+    mode: "all",
+  });
 
   const handleClick = () => {
     setIsMoved(!isMoved);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    try {
-      if (isMoved) {
-        //Regristration
-        if (isJobSeeker) {
-          //Job Seeker
-          const res = await axios.post(
-            `http://localhost:3000/api/v1/user/register`,
-            { email, password, name, contact_no },
-            { withCredentials: true }
-          );
-          console.log(res.data);
-          setIsMoved(false);
-        } else {
-          //Company
-          const res = await axios.post(
-            `http://localhost:3000/api/v1/company/register`,
-            { email, password, name, contact_no },
-            { withCredentials: true }
-          );
-          console.log(res.data);
-          setIsMoved(false);
-        }
-      } else {
-        //Login
-        const res = await axios.post(
-          `http://localhost:3000/api/v1/user/login`,
-          { email, password },
-          { withCredentials: true }
-        );
-        console.log(res.data);
-        if (res?.status === 200) {
-          toast.success(res?.data?.message);
-          dispatch(signInSuccess(res.data));
-          navigate("/");
-        } else {
-          toast.error(res?.data?.message);
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      console.error("Error message:", error.message);
-      console.error("Error response:", error.response);
-      toast.error(error.response?.data?.message);
-      // setError(error.response?.data?.message || "An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+  const onLogin = (data) => {
+    console.log(data);
+  };
+
+  const onRegister = (data) => {
+    console.log(data);
   };
 
   return (
@@ -126,6 +99,9 @@ function Login() {
                 type="email"
                 variant="outlined"
                 fullWidth
+                {...loginRegister("email")}
+                error={!!loginErrors.email}
+                helperText={loginErrors.email?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
                   mb: 2,
@@ -142,6 +118,9 @@ function Login() {
                 type="password"
                 variant="outlined"
                 fullWidth
+                {...loginRegister("password")}
+                error={!!loginErrors.password}
+                helperText={loginErrors.password?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
                   mb: 2,
@@ -154,7 +133,16 @@ function Login() {
                 }}
               />
               <FormControlLabel
-                control={<Checkbox sx={{ color: "#888" }} />}
+                control={
+                  <Checkbox
+                    sx={{
+                      color: "#888",
+                      "&.Mui-checked": {
+                        color: "#8B7B9B",
+                      },
+                    }}
+                  />
+                }
                 label={
                   <Typography variant="body2" sx={{ color: "gray" }}>
                     I agree to the{" "}
@@ -165,21 +153,28 @@ function Login() {
                 }
                 sx={{ mb: 2 }}
               />
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{
-                  backgroundColor: "#8b5cf6",
-                  color: "#fff",
-                  py: 1.4,
+              <CustomButton
+                type="button"
+                buttonTitle="Login"
+                backgroundColor="#8b5cf6"
+                textColor="#fff"
+                hoverColor="#7c3aed"
+                style={{
+                  padding: "20px 0",
                   fontWeight: 600,
                   borderRadius: "8px",
-                  mb: 3,
-                  "&:hover": { backgroundColor: "#7c3aed" },
+                  width: "100%",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                  fontSize: "16px",
                 }}
-              >
-                Login
-              </Button>
+                // isLoading={true}
+                handleRedirect={() => {
+                  if (!loading) {
+                    handleLoginSubmit(onLogin)();
+                  }
+                }}
+              />
               <Divider
                 sx={{
                   borderColor: "gray",
@@ -223,10 +218,16 @@ function Login() {
                   }}
                 />
                 <CustomButton
-                  icon={<Apple />}
+                  icon={
+                    <img
+                      src="/assets/microsoft-icon.svg"
+                      alt="Microsoft"
+                      className="w-[20px]"
+                    />
+                  }
                   backgroundColor="transparent"
                   textColor="white"
-                  buttonTitle="Apple"
+                  buttonTitle="Microsoft"
                   iconForward={true}
                   style={{
                     width: "100%",
@@ -280,6 +281,9 @@ function Login() {
                   label="First name"
                   variant="outlined"
                   fullWidth
+                  {...regRegister("firstName")}
+                  error={!!regErrors.firstName}
+                  helperText={regErrors.firstName?.message}
                   InputLabelProps={{ style: { color: "#aaa" } }}
                   sx={{
                     mb: 2,
@@ -295,6 +299,9 @@ function Login() {
                   label="Last name"
                   variant="outlined"
                   fullWidth
+                  {...regRegister("lastName")}
+                  error={!!regErrors.lastName}
+                  helperText={regErrors.lastName?.message}
                   InputLabelProps={{ style: { color: "#aaa" } }}
                   sx={{
                     mb: 2,
@@ -312,6 +319,9 @@ function Login() {
                 type="email"
                 variant="outlined"
                 fullWidth
+                {...regRegister("email")}
+                error={!!regErrors.email}
+                helperText={regErrors.email?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
                   mb: 2,
@@ -328,6 +338,9 @@ function Login() {
                 type="password"
                 variant="outlined"
                 fullWidth
+                {...regRegister("password")}
+                error={!!regErrors.password}
+                helperText={regErrors.password?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
                   mb: 2,
@@ -339,8 +352,17 @@ function Login() {
                   },
                 }}
               />
+
               <FormControlLabel
-                control={<Checkbox sx={{ color: "#888" }} />}
+                control={
+                  <Checkbox
+                    {...regRegister("terms")}
+                    sx={{
+                      color: "#888",
+                      "&.Mui-checked": { color: "#8B7B9B" },
+                    }}
+                  />
+                }
                 label={
                   <Typography variant="body2" sx={{ color: "gray" }}>
                     I agree to the{" "}
@@ -349,23 +371,36 @@ function Login() {
                     </Link>
                   </Typography>
                 }
-                sx={{ mb: 2 }}
               />
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{
-                  backgroundColor: "#8b5cf6",
-                  color: "#fff",
-                  py: 1.4,
+              {regErrors.terms && (
+                <Typography
+                  sx={{ color: "#d32f2f", fontSize: "12px", mt: -1, mb: 2 }}
+                >
+                  {regErrors.terms.message}
+                </Typography>
+              )}
+              <CustomButton
+                type="button"
+                buttonTitle="Create an account"
+                backgroundColor="#8b5cf6"
+                textColor="#fff"
+                hoverColor="#7c3aed"
+                style={{
+                  padding: "20px 0",
                   fontWeight: 600,
                   borderRadius: "8px",
-                  mb: 3,
-                  "&:hover": { backgroundColor: "#7c3aed" },
+                  width: "100%",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                  fontSize: "16px",
                 }}
-              >
-                Create account
-              </Button>
+                // isLoading={true}
+                handleRedirect={() => {
+                  if (!loading) {
+                    handleRegisterSubmit(onRegister)();
+                  }
+                }}
+              />
               <Divider
                 sx={{
                   borderColor: "gray",
@@ -409,10 +444,16 @@ function Login() {
                   }}
                 />
                 <CustomButton
-                  icon={<Apple />}
+                  icon={
+                    <img
+                      src="/assets/microsoft-icon.svg"
+                      alt="Microsoft"
+                      className="w-[20px]"
+                    />
+                  }
                   backgroundColor="transparent"
                   textColor="white"
-                  buttonTitle="Apple"
+                  buttonTitle="Microsoft"
                   iconForward={true}
                   style={{
                     width: "100%",
