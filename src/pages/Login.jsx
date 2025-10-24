@@ -55,6 +55,14 @@ function Login() {
     setIsMoved(!isMoved);
   };
 
+  const handleGoogle = () =>{
+
+  };
+
+  const handleMicrosoft = () => {
+
+  };
+  
   const onLogin = (data) => {
     console.log(data);
   };
@@ -67,32 +75,42 @@ function Login() {
     <div className="min-h-screen px-4 sm:px-6 md:px-32 py-12 bg-[#8B7B9B] flex justify-center items-center">
       <div className="flex flex-col md:flex-row bg-[#292433] relative gap-10 w-full h-auto md:h-[85vh] rounded-lg overflow-hidden shadow-xl ">
         <div
-          className={`w-full md:w-[50%] h-full px-8 rounded-lg transition-opacity duration-700
-                    ${
-                      !isMoved ? "opacity-100" : "opacity-0 pointer-events-none"
-                    }`}
+          className={`w-full md:w-[50%] h-full px-4 sm:px-6 md:px-8 rounded-lg transition-opacity duration-700
+              ${!isMoved ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
           <Box
             sx={{
               height: "100%",
               display: "flex",
-              gap: 4,
+              gap: { xs: 2, sm: 3, md: 4 },
               flexDirection: "column",
               justifyContent: "center",
-              padding: "0 70px",
+              padding: { xs: "0 20px", sm: "0 40px", md: "0 70px" },
             }}
           >
             <Box>
               <Typography
                 fontWeight={600}
-                sx={{ mb: 1, color: "white", fontSize: "44px" }}
+                sx={{
+                  mb: { xs: 0.5, sm: 1 },
+                  color: "white",
+                  fontSize: { xs: "28px", sm: "36px", md: "44px" },
+                  textAlign: { xs: "center", md: "left" },
+                }}
               >
                 Glad to see you again!
               </Typography>
-              <Typography sx={{ color: "#aaa", fontSize: "14px" }}>
-                Sign in to catch up with what’s new.
+              <Typography
+                sx={{
+                  color: "#aaa",
+                  fontSize: { xs: "12px", sm: "13px", md: "14px" },
+                  textAlign: { xs: "center", md: "left" },
+                }}
+              >
+                Sign in to catch up with what's new.
               </Typography>
             </Box>
+
             <Box>
               <TextField
                 label="Email"
@@ -104,15 +122,25 @@ function Login() {
                 helperText={loginErrors.email?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
-                  mb: 2,
-                  input: { color: "#fff" },
+                  mb: { xs: 1.5, sm: 2 },
+                  input: {
+                    color: "#fff",
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": { borderColor: "#888" },
                     "&:hover fieldset": { borderColor: "#aaa" },
                     "&.Mui-focused fieldset": { borderColor: "#888" },
                   },
+                  "& .MuiInputLabel-root": {
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
+                  "& .MuiFormHelperText-root": {
+                    fontSize: { xs: "11px", sm: "12px" },
+                  },
                 }}
               />
+
               <TextField
                 label="Enter your password"
                 type="password"
@@ -123,15 +151,25 @@ function Login() {
                 helperText={loginErrors.password?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
-                  mb: 2,
-                  input: { color: "#fff" },
+                  mb: { xs: 1.5, sm: 2 },
+                  input: {
+                    color: "#fff",
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": { borderColor: "#888" },
                     "&:hover fieldset": { borderColor: "#aaa" },
                     "&.Mui-focused fieldset": { borderColor: "#888" },
                   },
+                  "& .MuiInputLabel-root": {
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
+                  "& .MuiFormHelperText-root": {
+                    fontSize: { xs: "11px", sm: "12px" },
+                  },
                 }}
               />
+
               <FormControlLabel
                 control={
                   <Checkbox
@@ -140,35 +178,36 @@ function Login() {
                       "&.Mui-checked": {
                         color: "#8B7B9B",
                       },
+                      "& .MuiSvgIcon-root": {
+                        fontSize: { xs: "20px", sm: "24px" },
+                      },
                     }}
                   />
                 }
                 label={
-                  <Typography variant="body2" sx={{ color: "gray" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "gray",
+                      fontSize: { xs: "11px", sm: "12px", md: "14px" },
+                    }}
+                  >
                     I agree to the{" "}
                     <Link href="#" color="secondary" underline="hover">
                       Terms & Conditions
                     </Link>
                   </Typography>
                 }
-                sx={{ mb: 2 }}
+                sx={{ mb: { xs: 1.5, sm: 2 } }}
               />
+
               <CustomButton
                 type="button"
                 buttonTitle="Login"
                 backgroundColor="#8b5cf6"
                 textColor="#fff"
                 hoverColor="#7c3aed"
-                style={{
-                  padding: "20px 0",
-                  fontWeight: 600,
-                  borderRadius: "8px",
-                  width: "100%",
-                  justifyContent: "center",
-                  marginBottom: "20px",
-                  fontSize: "16px",
-                }}
-                // isLoading={true}
+                className="w-full justify-center font-semibold rounded-lg py-4 sm:py-[18px] md:py-5 mb-4 sm:mb-[18px] md:mb-5 text-sm sm:text-[15px] md:text-base transition-colors duration-200"
                 handleRedirect={() => {
                   if (!loading) {
                     handleLoginSubmit(onLogin)();
@@ -179,8 +218,9 @@ function Login() {
                 sx={{
                   borderColor: "gray",
                   color: "gray",
-                  mb: 3,
-                  fontSize: "12px",
+                  mb: { xs: 1, sm: 2 },
+                  mt: { xs: 1, sm: 2 },
+                  fontSize: { xs: "10px", sm: "11px", md: "12px" },
                   "&::before, &::after": {
                     borderColor: "gray",
                   },
@@ -188,11 +228,13 @@ function Login() {
               >
                 Or Login/Register with
               </Divider>
+
               <Box
                 sx={{
                   display: "flex",
-                  gap: 2,
+                  gap: { xs: 1, sm: 2 },
                   justifyContent: "space-between",
+                  flexDirection: { xs: "column", sm: "row" },
                 }}
               >
                 <CustomButton
@@ -200,51 +242,35 @@ function Login() {
                     <img
                       src="/assets/google-icon.svg"
                       alt="Google"
-                      className="w-[20px]"
+                      className="w-[16px] sm:w-[18px] md:w-[20px]"
                     />
                   }
                   backgroundColor="transparent"
                   textColor="white"
                   buttonTitle="Google"
                   iconForward={true}
-                  style={{
-                    width: "100%",
-                    justifyContent: "center",
-                    textTransform: "none",
-                    borderRadius: "none",
-                    border: "1px solid #555",
-                    gap: "10px",
-                    "&:hover": { borderColor: "#888" },
-                  }}
+                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
                 />
                 <CustomButton
                   icon={
                     <img
                       src="/assets/microsoft-icon.svg"
                       alt="Microsoft"
-                      className="w-[20px]"
+                      className="w-[16px] sm:w-[18px] md:w-[20px]"
                     />
                   }
                   backgroundColor="transparent"
                   textColor="white"
                   buttonTitle="Microsoft"
                   iconForward={true}
-                  style={{
-                    width: "100%",
-                    justifyContent: "center",
-                    textTransform: "none",
-                    borderRadius: "none",
-                    border: "1px solid #555",
-                    gap: "10px",
-                    "&:hover": { borderColor: "#888" },
-                  }}
+                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
                 />
               </Box>
             </Box>
           </Box>
         </div>
         <div
-          className={`overflow-y-auto w-full md:w-[50%] h-full px-8 py-9 rounded-lg transition-opacity duration-700 custom-scrollbar
+          className={`overflow-y-auto w-full md:w-[50%] h-full px-4 sm:px-6 md:px-8 py-6 sm:py-7 md:py-9 rounded-lg transition-opacity duration-700 custom-scrollbar
                     ${
                       isMoved ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
@@ -253,28 +279,41 @@ function Login() {
             sx={{
               height: "100%",
               display: "flex",
-              gap: 4,
+              gap: { xs: 2, sm: 3, md: 4 },
               flexDirection: "column",
               justifyContent: "center",
-              padding: "0 70px",
+              padding: { xs: "0 20px", sm: "0 40px", md: "0 70px" },
             }}
           >
             <Box>
               <Typography
                 fontWeight={600}
-                sx={{ mb: 1, color: "white", fontSize: "44px" }}
+                sx={{
+                  mb: { xs: 0.5, sm: 1 },
+                  color: "white",
+                  fontSize: { xs: "28px", sm: "36px", md: "44px" },
+                  textAlign: { xs: "center", md: "left" },
+                }}
               >
                 Create an account
               </Typography>
-              <Typography sx={{ color: "#aaa", fontSize: "14px" }}>
-                Join us today and get started in just a few steps..
+              <Typography
+                sx={{
+                  color: "#aaa",
+                  fontSize: { xs: "12px", sm: "13px", md: "14px" },
+                  textAlign: { xs: "center", md: "left" },
+                }}
+              >
+                Join us today and get started in just a few steps.
               </Typography>
             </Box>
+
             <Box>
               <Box
                 sx={{
                   display: "flex",
-                  gap: 1.5,
+                  gap: { xs: 1, sm: 1.5 },
+                  flexDirection: { xs: "column", sm: "row" },
                 }}
               >
                 <TextField
@@ -286,12 +325,21 @@ function Login() {
                   helperText={regErrors.firstName?.message}
                   InputLabelProps={{ style: { color: "#aaa" } }}
                   sx={{
-                    mb: 2,
-                    input: { color: "#fff" },
+                    mb: { xs: 1.5, sm: 2 },
+                    input: {
+                      color: "#fff",
+                      fontSize: { xs: "14px", sm: "16px" },
+                    },
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": { borderColor: "#888" },
                       "&:hover fieldset": { borderColor: "#aaa" },
                       "&.Mui-focused fieldset": { borderColor: "#888" },
+                    },
+                    "& .MuiInputLabel-root": {
+                      fontSize: { xs: "14px", sm: "16px" },
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontSize: { xs: "11px", sm: "12px" },
                     },
                   }}
                 />
@@ -304,16 +352,26 @@ function Login() {
                   helperText={regErrors.lastName?.message}
                   InputLabelProps={{ style: { color: "#aaa" } }}
                   sx={{
-                    mb: 2,
-                    input: { color: "#fff" },
+                    mb: { xs: 1.5, sm: 2 },
+                    input: {
+                      color: "#fff",
+                      fontSize: { xs: "14px", sm: "16px" },
+                    },
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": { borderColor: "#888" },
                       "&:hover fieldset": { borderColor: "#aaa" },
                       "&.Mui-focused fieldset": { borderColor: "#888" },
                     },
+                    "& .MuiInputLabel-root": {
+                      fontSize: { xs: "14px", sm: "16px" },
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontSize: { xs: "11px", sm: "12px" },
+                    },
                   }}
                 />
               </Box>
+
               <TextField
                 label="Email"
                 type="email"
@@ -324,15 +382,25 @@ function Login() {
                 helperText={regErrors.email?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
-                  mb: 2,
-                  input: { color: "#fff" },
+                  mb: { xs: 1.5, sm: 2 },
+                  input: {
+                    color: "#fff",
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": { borderColor: "#888" },
                     "&:hover fieldset": { borderColor: "#aaa" },
                     "&.Mui-focused fieldset": { borderColor: "#888" },
                   },
+                  "& .MuiInputLabel-root": {
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
+                  "& .MuiFormHelperText-root": {
+                    fontSize: { xs: "11px", sm: "12px" },
+                  },
                 }}
               />
+
               <TextField
                 label="Enter your password"
                 type="password"
@@ -343,12 +411,21 @@ function Login() {
                 helperText={regErrors.password?.message}
                 InputLabelProps={{ style: { color: "#aaa" } }}
                 sx={{
-                  mb: 2,
-                  input: { color: "#fff" },
+                  mb: { xs: 1.5, sm: 2 },
+                  input: {
+                    color: "#fff",
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": { borderColor: "#888" },
                     "&:hover fieldset": { borderColor: "#aaa" },
                     "&.Mui-focused fieldset": { borderColor: "#888" },
+                  },
+                  "& .MuiInputLabel-root": {
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
+                  "& .MuiFormHelperText-root": {
+                    fontSize: { xs: "11px", sm: "12px" },
                   },
                 }}
               />
@@ -360,11 +437,20 @@ function Login() {
                     sx={{
                       color: "#888",
                       "&.Mui-checked": { color: "#8B7B9B" },
+                      "& .MuiSvgIcon-root": {
+                        fontSize: { xs: "20px", sm: "24px" },
+                      },
                     }}
                   />
                 }
                 label={
-                  <Typography variant="body2" sx={{ color: "gray" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "gray",
+                      fontSize: { xs: "11px", sm: "12px", md: "14px" },
+                    }}
+                  >
                     I agree to the{" "}
                     <Link href="#" color="secondary" underline="hover">
                       Terms & Conditions
@@ -372,41 +458,41 @@ function Login() {
                   </Typography>
                 }
               />
+
               {regErrors.terms && (
                 <Typography
-                  sx={{ color: "#d32f2f", fontSize: "12px", mt: -1, mb: 2 }}
+                  sx={{
+                    color: "#d32f2f",
+                    fontSize: { xs: "11px", sm: "12px" },
+                    mt: { xs: -0.5, sm: -1 },
+                    mb: { xs: 1.5, sm: 2 },
+                  }}
                 >
                   {regErrors.terms.message}
                 </Typography>
               )}
+
               <CustomButton
                 type="button"
                 buttonTitle="Create an account"
                 backgroundColor="#8b5cf6"
                 textColor="#fff"
                 hoverColor="#7c3aed"
-                style={{
-                  padding: "20px 0",
-                  fontWeight: 600,
-                  borderRadius: "8px",
-                  width: "100%",
-                  justifyContent: "center",
-                  marginBottom: "20px",
-                  fontSize: "16px",
-                }}
-                // isLoading={true}
+                className="w-full justify-center font-semibold rounded-lg py-4 sm:py-[18px] md:py-5 mb-4 sm:mb-[18px] md:mb-5 text-sm sm:text-[15px] md:text-base transition-colors duration-200"
                 handleRedirect={() => {
                   if (!loading) {
                     handleRegisterSubmit(onRegister)();
                   }
                 }}
               />
+
               <Divider
                 sx={{
                   borderColor: "gray",
                   color: "gray",
-                  mb: 3,
-                  fontSize: "12px",
+                  mb: { xs: 1, sm: 2 },
+                  mt: { xs: 1, sm: 2 },
+                  fontSize: { xs: "10px", sm: "11px", md: "12px" },
                   "&::before, &::after": {
                     borderColor: "gray",
                   },
@@ -414,11 +500,13 @@ function Login() {
               >
                 Or register with
               </Divider>
+
               <Box
                 sx={{
                   display: "flex",
-                  gap: 2,
+                  gap: { xs: 1, sm: 2 },
                   justifyContent: "space-between",
+                  flexDirection: { xs: "column", sm: "row" },
                 }}
               >
                 <CustomButton
@@ -426,44 +514,28 @@ function Login() {
                     <img
                       src="/assets/google-icon.svg"
                       alt="Google"
-                      className="w-[20px]"
+                      className="w-[16px] sm:w-[18px] md:w-[20px]"
                     />
                   }
                   backgroundColor="transparent"
                   textColor="white"
                   buttonTitle="Google"
                   iconForward={true}
-                  style={{
-                    width: "100%",
-                    justifyContent: "center",
-                    textTransform: "none",
-                    borderRadius: "none",
-                    border: "1px solid #555",
-                    gap: "10px",
-                    "&:hover": { borderColor: "#888" },
-                  }}
+                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
                 />
                 <CustomButton
                   icon={
                     <img
                       src="/assets/microsoft-icon.svg"
                       alt="Microsoft"
-                      className="w-[20px]"
+                      className="w-[16px] sm:w-[18px] md:w-[20px]"
                     />
                   }
                   backgroundColor="transparent"
                   textColor="white"
                   buttonTitle="Microsoft"
                   iconForward={true}
-                  style={{
-                    width: "100%",
-                    justifyContent: "center",
-                    textTransform: "none",
-                    borderRadius: "none",
-                    border: "1px solid #555",
-                    gap: "10px",
-                    "&:hover": { borderColor: "#888" },
-                  }}
+                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
                 />
               </Box>
             </Box>
