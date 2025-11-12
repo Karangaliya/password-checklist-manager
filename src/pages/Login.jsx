@@ -1,25 +1,36 @@
-import { useState } from "react";
-import CustomButton from "../core/component/CustomButton";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import React, { useState } from "react";
 import {
   Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Link,
+  Grid,
   TextField,
   Typography,
   Divider,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Fade,
 } from "@mui/material";
-import { loginSchema } from "../core/validations/login.schema";
-import { registerSchema } from "../core/validations/registration.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../auth/firebaseConfig"; // keep your firebaseConfig paths
+import { loginSchema } from "../core/validations/login.schema";
+import CustomButton from "../core/component/CustomButton";
+import { registerSchema } from "../core/validations/registration.schema";
 
-function Login() {
-  const [isMoved, setIsMoved] = useState(false);
+/**
+ * AuthPage.jsx
+ * - Desktop: left purple hero + right speech-bubble card (login/register)
+ * - Mobile: only the narrow card (login or register). Clicking "register here" toggles card content.
+ *
+ * Replace the image paths below with your own assets location if different.
+ */
+
+export default function AuthPage() {
+  const [activeTab, setActiveTab] = useState("login"); // "login" | "register"
   const [loading, setLoading] = useState(false);
+
+  // login form
   const {
     register: loginRegister,
     handleSubmit: handleLoginSubmit,
@@ -27,600 +38,317 @@ function Login() {
   } = useForm({
     resolver: yupResolver(loginSchema),
     mode: "all",
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-    reValidateMode: "all",
+    defaultValues: { email: "", password: "" },
   });
 
+  // register form
   const {
     register: regRegister,
     handleSubmit: handleRegisterSubmit,
     formState: { errors: regErrors },
   } = useForm({
     resolver: yupResolver(registerSchema),
+    mode: "all",
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: "",
       terms: false,
     },
-    reValidateMode: "all",
-    mode: "all",
   });
 
-  const handleClick = () => {
-    setIsMoved(!isMoved);
+  const handleGoogle = async () => {
+    try {
+      setLoading(true);
+      const result = await signInWithPopup(auth, provider);
+      console.log("google result", result);
+      // use result to sign in/register on backend if needed
+    } catch (err) {
+      console.error("Google login error", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogle = () =>{
-
-  };
-
-  const handleMicrosoft = () => {
-
-  };
-  
   const onLogin = (data) => {
-    console.log(data);
+    console.log("login data", data);
+    // your login logic here
   };
 
   const onRegister = (data) => {
-    console.log(data);
+    console.log("register data", data);
+    // your register logic here
   };
 
   return (
-    <div className="min-h-screen px-4 sm:px-6 md:px-32 py-12 bg-[#8B7B9B] flex justify-center items-center">
-      <div className="flex flex-col md:flex-row bg-[#292433] relative gap-10 w-full h-auto md:h-[85vh] rounded-lg overflow-hidden shadow-xl ">
+    <div className="min-h-screen flex items-center justify-center bg-[#0f2430]">
+      {/* decorative background (image) */}
+
+      {/* MAIN WRAPPER — flex container (desktop row, mobile column) */}
+      <div className="flex flex-col md:flex-row w-full max-w-[1200px] gap-8 md:gap-10 items-center justify-center">
+        {/* LEFT PANEL */}
         <div
-          className={`w-full md:w-[50%] h-full px-4 sm:px-6 md:px-8 rounded-lg transition-opacity duration-700
-              ${!isMoved ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          className="hidden md:flex rounded-2xl overflow-hidden relative md:justify-between"
+          style={{
+            backgroundImage: "url('/assets/bg-image.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            boxShadow: "0 20px 50px rgba(0,0,0,0.45)",
+            minHeight: "800px",
+            minWidth: "1200px",
+          }}
         >
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              gap: { xs: 2, sm: 3, md: 4 },
-              flexDirection: "column",
-              justifyContent: "center",
-              padding: { xs: "0 20px", sm: "0 40px", md: "0 70px" },
-            }}
-          >
-            <Box>
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#40207a]/90 via-[#6b3fd6]/75 to-[#8b5cf6]/50"></div>
+
+          <div className="relative p-10 flex flex-col justify-between text-white md:w-[50%]">
+            <div>
               <Typography
-                fontWeight={600}
-                sx={{
-                  mb: { xs: 0.5, sm: 1 },
-                  color: "white",
-                  fontSize: { xs: "28px", sm: "36px", md: "44px" },
-                  textAlign: { xs: "center", md: "left" },
-                }}
+                variant="h2"
+                sx={{ fontWeight: 800 }}
+                className="mb-4 text-5xl leading-snug"
               >
-                Glad to see you again!
+                Welcome
+                <br />
+                Back !
               </Typography>
               <Typography
-                sx={{
-                  color: "#aaa",
-                  fontSize: { xs: "12px", sm: "13px", md: "14px" },
-                  textAlign: { xs: "center", md: "left" },
-                }}
+                sx={{ color: "rgba(255,255,255,0.9)", maxWidth: 420 }}
+                className="text-sm"
               >
-                Sign in to catch up with what's new.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </Typography>
-            </Box>
-
-            <Box>
-              <TextField
-                label="Email"
-                type="email"
-                variant="outlined"
-                fullWidth
-                {...loginRegister("email")}
-                error={!!loginErrors.email}
-                helperText={loginErrors.email?.message}
-                InputLabelProps={{ style: { color: "#aaa" } }}
-                sx={{
-                  mb: { xs: 1.5, sm: 2 },
-                  input: {
-                    color: "#fff",
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#888" },
-                    "&:hover fieldset": { borderColor: "#aaa" },
-                    "&.Mui-focused fieldset": { borderColor: "#888" },
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiFormHelperText-root": {
-                    fontSize: { xs: "11px", sm: "12px" },
-                  },
-                }}
-              />
-
-              <TextField
-                label="Enter your password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                {...loginRegister("password")}
-                error={!!loginErrors.password}
-                helperText={loginErrors.password?.message}
-                InputLabelProps={{ style: { color: "#aaa" } }}
-                sx={{
-                  mb: { xs: 1.5, sm: 2 },
-                  input: {
-                    color: "#fff",
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#888" },
-                    "&:hover fieldset": { borderColor: "#aaa" },
-                    "&.Mui-focused fieldset": { borderColor: "#888" },
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiFormHelperText-root": {
-                    fontSize: { xs: "11px", sm: "12px" },
-                  },
-                }}
-              />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    sx={{
-                      color: "#888",
-                      "&.Mui-checked": {
-                        color: "#8B7B9B",
-                      },
-                      "& .MuiSvgIcon-root": {
-                        fontSize: { xs: "20px", sm: "24px" },
-                      },
-                    }}
-                  />
-                }
-                label={
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "gray",
-                      fontSize: { xs: "11px", sm: "12px", md: "14px" },
-                    }}
-                  >
-                    I agree to the{" "}
-                    <Link href="#" color="secondary" underline="hover">
-                      Terms & Conditions
-                    </Link>
-                  </Typography>
-                }
-                sx={{ mb: { xs: 1.5, sm: 2 } }}
-              />
-
-              <CustomButton
-                type="button"
-                buttonTitle="Login"
-                backgroundColor="#8b5cf6"
-                textColor="#fff"
-                hoverColor="#7c3aed"
-                className="w-full justify-center font-semibold rounded-lg py-4 sm:py-[18px] md:py-5 mb-4 sm:mb-[18px] md:mb-5 text-sm sm:text-[15px] md:text-base transition-colors duration-200"
-                handleRedirect={() => {
-                  if (!loading) {
-                    handleLoginSubmit(onLogin)();
-                  }
-                }}
-              />
-              <Divider
-                sx={{
-                  borderColor: "gray",
-                  color: "gray",
-                  mb: { xs: 1, sm: 2 },
-                  mt: { xs: 1, sm: 2 },
-                  fontSize: { xs: "10px", sm: "11px", md: "12px" },
-                  "&::before, &::after": {
-                    borderColor: "gray",
-                  },
-                }}
-              >
-                Or Login/Register with
-              </Divider>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: { xs: 1, sm: 2 },
-                  justifyContent: "space-between",
-                  flexDirection: { xs: "column", sm: "row" },
-                }}
-              >
-                <CustomButton
-                  icon={
-                    <img
-                      src="/assets/google-icon.svg"
-                      alt="Google"
-                      className="w-[16px] sm:w-[18px] md:w-[20px]"
-                    />
-                  }
-                  backgroundColor="transparent"
-                  textColor="white"
-                  buttonTitle="Google"
-                  iconForward={true}
-                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
-                />
-                <CustomButton
-                  icon={
-                    <img
-                      src="/assets/microsoft-icon.svg"
-                      alt="Microsoft"
-                      className="w-[16px] sm:w-[18px] md:w-[20px]"
-                    />
-                  }
-                  backgroundColor="transparent"
-                  textColor="white"
-                  buttonTitle="Microsoft"
-                  iconForward={true}
-                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
-                />
-              </Box>
-            </Box>
-          </Box>
-        </div>
-        <div
-          className={`overflow-y-auto w-full md:w-[50%] h-full px-4 sm:px-6 md:px-8 py-6 sm:py-7 md:py-9 rounded-lg transition-opacity duration-700 custom-scrollbar
-                    ${
-                      isMoved ? "opacity-100" : "opacity-0 pointer-events-none"
-                    }`}
-        >
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              gap: { xs: 2, sm: 3, md: 4 },
-              flexDirection: "column",
-              justifyContent: "center",
-              padding: { xs: "0 20px", sm: "0 40px", md: "0 70px" },
-            }}
-          >
-            <Box>
-              <Typography
-                fontWeight={600}
-                sx={{
-                  mb: { xs: 0.5, sm: 1 },
-                  color: "white",
-                  fontSize: { xs: "28px", sm: "36px", md: "44px" },
-                  textAlign: { xs: "center", md: "left" },
-                }}
-              >
-                Create an account
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#aaa",
-                  fontSize: { xs: "12px", sm: "13px", md: "14px" },
-                  textAlign: { xs: "center", md: "left" },
-                }}
-              >
-                Join us today and get started in just a few steps.
-              </Typography>
-            </Box>
-
-            <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: { xs: 1, sm: 1.5 },
-                  flexDirection: { xs: "column", sm: "row" },
-                }}
-              >
-                <TextField
-                  label="First name"
-                  variant="outlined"
-                  fullWidth
-                  {...regRegister("firstName")}
-                  error={!!regErrors.firstName}
-                  helperText={regErrors.firstName?.message}
-                  InputLabelProps={{ style: { color: "#aaa" } }}
-                  sx={{
-                    mb: { xs: 1.5, sm: 2 },
-                    input: {
-                      color: "#fff",
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "#888" },
-                      "&:hover fieldset": { borderColor: "#aaa" },
-                      "&.Mui-focused fieldset": { borderColor: "#888" },
-                    },
-                    "& .MuiInputLabel-root": {
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                    "& .MuiFormHelperText-root": {
-                      fontSize: { xs: "11px", sm: "12px" },
-                    },
-                  }}
-                />
-                <TextField
-                  label="Last name"
-                  variant="outlined"
-                  fullWidth
-                  {...regRegister("lastName")}
-                  error={!!regErrors.lastName}
-                  helperText={regErrors.lastName?.message}
-                  InputLabelProps={{ style: { color: "#aaa" } }}
-                  sx={{
-                    mb: { xs: 1.5, sm: 2 },
-                    input: {
-                      color: "#fff",
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "#888" },
-                      "&:hover fieldset": { borderColor: "#aaa" },
-                      "&.Mui-focused fieldset": { borderColor: "#888" },
-                    },
-                    "& .MuiInputLabel-root": {
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                    "& .MuiFormHelperText-root": {
-                      fontSize: { xs: "11px", sm: "12px" },
-                    },
-                  }}
-                />
-              </Box>
-
-              <TextField
-                label="Email"
-                type="email"
-                variant="outlined"
-                fullWidth
-                {...regRegister("email")}
-                error={!!regErrors.email}
-                helperText={regErrors.email?.message}
-                InputLabelProps={{ style: { color: "#aaa" } }}
-                sx={{
-                  mb: { xs: 1.5, sm: 2 },
-                  input: {
-                    color: "#fff",
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#888" },
-                    "&:hover fieldset": { borderColor: "#aaa" },
-                    "&.Mui-focused fieldset": { borderColor: "#888" },
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiFormHelperText-root": {
-                    fontSize: { xs: "11px", sm: "12px" },
-                  },
-                }}
-              />
-
-              <TextField
-                label="Enter your password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                {...regRegister("password")}
-                error={!!regErrors.password}
-                helperText={regErrors.password?.message}
-                InputLabelProps={{ style: { color: "#aaa" } }}
-                sx={{
-                  mb: { xs: 1.5, sm: 2 },
-                  input: {
-                    color: "#fff",
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#888" },
-                    "&:hover fieldset": { borderColor: "#aaa" },
-                    "&.Mui-focused fieldset": { borderColor: "#888" },
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontSize: { xs: "14px", sm: "16px" },
-                  },
-                  "& .MuiFormHelperText-root": {
-                    fontSize: { xs: "11px", sm: "12px" },
-                  },
-                }}
-              />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    {...regRegister("terms")}
-                    sx={{
-                      color: "#888",
-                      "&.Mui-checked": { color: "#8B7B9B" },
-                      "& .MuiSvgIcon-root": {
-                        fontSize: { xs: "20px", sm: "24px" },
-                      },
-                    }}
-                  />
-                }
-                label={
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "gray",
-                      fontSize: { xs: "11px", sm: "12px", md: "14px" },
-                    }}
-                  >
-                    I agree to the{" "}
-                    <Link href="#" color="secondary" underline="hover">
-                      Terms & Conditions
-                    </Link>
-                  </Typography>
-                }
-              />
-
-              {regErrors.terms && (
-                <Typography
-                  sx={{
-                    color: "#d32f2f",
-                    fontSize: { xs: "11px", sm: "12px" },
-                    mt: { xs: -0.5, sm: -1 },
-                    mb: { xs: 1.5, sm: 2 },
-                  }}
-                >
-                  {regErrors.terms.message}
-                </Typography>
-              )}
-
-              <CustomButton
-                type="button"
-                buttonTitle="Create an account"
-                backgroundColor="#8b5cf6"
-                textColor="#fff"
-                hoverColor="#7c3aed"
-                className="w-full justify-center font-semibold rounded-lg py-4 sm:py-[18px] md:py-5 mb-4 sm:mb-[18px] md:mb-5 text-sm sm:text-[15px] md:text-base transition-colors duration-200"
-                handleRedirect={() => {
-                  if (!loading) {
-                    handleRegisterSubmit(onRegister)();
-                  }
-                }}
-              />
-
-              <Divider
-                sx={{
-                  borderColor: "gray",
-                  color: "gray",
-                  mb: { xs: 1, sm: 2 },
-                  mt: { xs: 1, sm: 2 },
-                  fontSize: { xs: "10px", sm: "11px", md: "12px" },
-                  "&::before, &::after": {
-                    borderColor: "gray",
-                  },
-                }}
-              >
-                Or register with
-              </Divider>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: { xs: 1, sm: 2 },
-                  justifyContent: "space-between",
-                  flexDirection: { xs: "column", sm: "row" },
-                }}
-              >
-                <CustomButton
-                  icon={
-                    <img
-                      src="/assets/google-icon.svg"
-                      alt="Google"
-                      className="w-[16px] sm:w-[18px] md:w-[20px]"
-                    />
-                  }
-                  backgroundColor="transparent"
-                  textColor="white"
-                  buttonTitle="Google"
-                  iconForward={true}
-                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
-                />
-                <CustomButton
-                  icon={
-                    <img
-                      src="/assets/microsoft-icon.svg"
-                      alt="Microsoft"
-                      className="w-[16px] sm:w-[18px] md:w-[20px]"
-                    />
-                  }
-                  backgroundColor="transparent"
-                  textColor="white"
-                  buttonTitle="Microsoft"
-                  iconForward={true}
-                  className="w-full justify-center normal-case rounded-none border border-[#555] hover:border-[#888] text-[13px] sm:text-[14px] md:text-[16px] py-[10px] sm:py-[12px] md:py-[14px] gap-[8px] sm:gap-[10px] transition-colors duration-200"
-                />
-              </Box>
-            </Box>
-          </Box>
-        </div>
-        <div
-          className={`bg-[url('https://images.hdqwalls.com/download/mac-os-mojave-5k-np-1920x1200.jpg')] 
-                      bg-cover bg-center rounded-lg
-                      w-full md:w-[50%] h-[96%] my-[16px] absolute top-0 md:right-[40%] 
-                      duration-1000 ease-in-out transform
-                      ${isMoved ? "translate-x-[-18%]" : "translate-x-[78%]"}`}
-        >
-          <div className="relative w-full h-full">
-            <div
-              className={`absolute inset-0 px-8 py-5 flex flex-col justify-between gap-2 text-white
-                        transition-all duration-700 ease-in-out
-                        ${
-                          isMoved
-                            ? "opacity-100 translate-x-0"
-                            : "opacity-0 -translate-x-10 pointer-events-none"
-                        }`}
-            >
-              <div className="flex justify-between items-start w-full">
-                <img src="/assets/logo.svg" alt="Logo" className="w-[60px]" />
-                <CustomButton
-                  handleRedirect={handleClick}
-                  backgroundColor="transparent"
-                  buttonTitle="Back to Login"
-                  style={{
-                    border: "1px solid #fff",
-                    fontSize: "12px",
-                    padding: "5px 15px",
-                    width: "fit-content",
-                  }}
-                  iconForward={false}
-                  icon={<ArrowForwardIcon />}
-                />
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-bold">Welcome Back</p>
-                <p className="text-sm sm:text-base">
-                  Welcome back! Continue your journey to find your dream job or
-                  the perfect candidate for your team.
-                </p>
-              </div>
             </div>
-            <div
-              className={`absolute inset-0 px-8 py-5 flex flex-col justify-between gap-2 text-white
-                      transition-all duration-700 ease-in-out
-                      ${
-                        !isMoved
-                          ? "opacity-100 translate-x-0"
-                          : "opacity-0 translate-x-10 pointer-events-none"
-                      }`}
-            >
-              <div className="flex justify-between items-start w-full">
-                <CustomButton
-                  handleRedirect={handleClick}
-                  backgroundColor="transparent"
-                  buttonTitle="Back to Register"
-                  style={{
-                    border: "1px solid #fff",
-                    fontSize: "12px",
-                    padding: "5px 15px",
-                    width: "fit-content",
-                  }}
-                  iconForward={true}
-                  icon={<ArrowBackIcon />}
-                />
-                <img src="/assets/logo.svg" alt="Logo" className="w-[60px]" />
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-bold">
-                  Start New Journey, With Us!
-                </p>
-                <p className="text-sm sm:text-base">
-                  Connecting talent with opportunities! Sign up to find your
-                  dream job or hire the best professionals for your company.
-                </p>
+          </div>
+
+          <div className="flex justify-center w-full md:w-[50%] relative">
+            {/* white card */}
+            <div className="bg-white rounded-[26px] relative w-full min-h-[420px] m-5 shadow-2xl z-10">
+              {/* ✅ arrow box (behind card) */}
+              <div className="absolute top-[55px] left-[-35px] h-[100px] w-[100px] bg-white rounded-2xl rotate-45 -z-10"></div>
+
+              {/* inside content */}
+              <div className="p-8 sm:p-10">
+                {/* Header */}
+                <div className="mb-2 flex items-center justify-between">
+                  <Typography
+                    variant="h5"
+                    sx={{ fontWeight: 700, fontSize: 24 }}
+                  >
+                    {activeTab === "login" ? "Login" : "Register"}
+                  </Typography>
+                  <div className="text-sm text-gray-500">
+                    {activeTab === "login" ? (
+                      <>
+                        Don't have an account?{" "}
+                        <button
+                          onClick={() => setActiveTab("register")}
+                          className="text-[#6f4bd6] underline font-medium"
+                        >
+                          Create your account
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        Already a member?{" "}
+                        <button
+                          onClick={() => setActiveTab("login")}
+                          className="text-[#6f4bd6] underline font-medium"
+                        >
+                          Sign in
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* FORM AREA */}
+                <div>
+                  {/* LOGIN FORM */}
+                  <Fade in={activeTab === "login"} mountOnEnter unmountOnExit>
+                    <div aria-hidden={activeTab !== "login"}>
+                      <form onSubmit={handleLoginSubmit(onLogin)} noValidate>
+                        <TextField
+                          size="small"
+                          label="Username / Email"
+                          fullWidth
+                          {...loginRegister("email")}
+                          error={!!loginErrors.email}
+                          helperText={loginErrors.email?.message}
+                          sx={{
+                            mb: 2,
+                            "& .MuiOutlinedInput-root": { borderRadius: 2 },
+                          }}
+                        />
+                        <TextField
+                          size="small"
+                          label="Password"
+                          type="password"
+                          fullWidth
+                          {...loginRegister("password")}
+                          error={!!loginErrors.password}
+                          helperText={loginErrors.password?.message}
+                          sx={{
+                            mb: 2,
+                            "& .MuiOutlinedInput-root": { borderRadius: 2 },
+                          }}
+                        />
+
+                        <div className="flex items-center justify-between mb-4">
+                          <FormControlLabel
+                            control={<Checkbox />}
+                            label={
+                              <span className="text-sm text-gray-600">
+                                Remember Me
+                              </span>
+                            }
+                          />
+                          <Link
+                            href="#"
+                            underline="hover"
+                            className="text-sm text-gray-600"
+                          >
+                            forgot password?
+                          </Link>
+                        </div>
+
+                        <div className="flex justify-end mb-4">
+                          <CustomButton
+                            type="submit"
+                            buttonTitle="LOGIN"
+                            backgroundColor="#6f4bd6"
+                            textColor="#fff"
+                            hoverColor="#5c3bd1"
+                            className="w-40 justify-center rounded-full py-2"
+                            handleRedirect={() => {}}
+                          />
+                        </div>
+                      </form>
+                    </div>
+                  </Fade>
+
+                  {/* REGISTER FORM */}
+                  <Fade
+                    in={activeTab === "register"}
+                    mountOnEnter
+                    unmountOnExit
+                  >
+                    <div aria-hidden={activeTab !== "register"}>
+                      <form
+                        onSubmit={handleRegisterSubmit(onRegister)}
+                        noValidate
+                      >
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                          <TextField
+                            size="small"
+                            label="First name"
+                            fullWidth
+                            {...regRegister("firstName")}
+                            error={!!regErrors.firstName}
+                            helperText={regErrors.firstName?.message}
+                          />
+                          <TextField
+                            size="small"
+                            label="Last name"
+                            fullWidth
+                            {...regRegister("lastName")}
+                            error={!!regErrors.lastName}
+                            helperText={regErrors.lastName?.message}
+                          />
+                        </div>
+
+                        <TextField
+                          size="small"
+                          label="Email"
+                          fullWidth
+                          {...regRegister("email")}
+                          error={!!regErrors.email}
+                          helperText={regErrors.email?.message}
+                          sx={{ mb: 2 }}
+                        />
+                        <TextField
+                          size="small"
+                          label="Password"
+                          type="password"
+                          fullWidth
+                          {...regRegister("password")}
+                          error={!!regErrors.password}
+                          helperText={regErrors.password?.message}
+                          sx={{ mb: 2 }}
+                        />
+                        <TextField
+                          size="small"
+                          label="Confirm password"
+                          type="password"
+                          fullWidth
+                          {...regRegister("confirmPassword")}
+                          sx={{ mb: 2 }}
+                        />
+                        <FormControlLabel
+                          control={<Checkbox {...regRegister("terms")} />}
+                          label={
+                            <span className="text-sm text-gray-600">
+                              I accept the Terms & Privacy
+                            </span>
+                          }
+                        />
+                        <div className="mt-4">
+                          <CustomButton
+                            type="submit"
+                            buttonTitle="SIGN UP"
+                            backgroundColor="#6f4bd6"
+                            textColor="#fff"
+                            hoverColor="#5c3bd1"
+                            className="w-full justify-center rounded-full py-2"
+                            handleRedirect={() => {}}
+                          />
+                        </div>
+                      </form>
+                    </div>
+                  </Fade>
+                </div>
+
+                {/* Divider + social login */}
+                <Divider sx={{ my: 2 }}>Or login with</Divider>
+
+                <div className="flex items-center gap-3">
+                  <div className="flex-1">
+                    <CustomButton
+                      icon={
+                        <img
+                          src="/assets/google-icon.svg"
+                          alt="google"
+                          className="w-4 h-4"
+                        />
+                      }
+                      buttonTitle="Google"
+                      backgroundColor="transparent"
+                      textColor="#111"
+                      iconForward={true}
+                      handleRedirect={handleGoogle}
+                      className="w-full justify-center rounded-full border border-gray-200 py-2"
+                    />
+                  </div>
+
+                  <div className="flex gap-2 items-center">
+                    <div className="w-12 h-8 rounded-full bg-[#4f6b9a] shadow-inner" />
+                    <div className="w-12 h-8 rounded-full bg-[#09a7ff]" />
+                  </div>
+                </div>
+
+                <div className="text-center mt-3 text-xs text-gray-500">
+                  By continuing you agree to our <Link href="#">Terms</Link> and{" "}
+                  <Link href="#">Privacy</Link>.
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* RIGHT PANEL — speech-bubble card */}
       </div>
     </div>
   );
 }
-export default Login;
