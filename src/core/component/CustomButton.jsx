@@ -13,6 +13,7 @@ function CustomButton({
   hoverColor,
   isLoading = false,
   isDisabled = false,
+  ...props
 }) {
   const [isPressed, setIsPressed] = useState(false);
 
@@ -21,6 +22,7 @@ function CustomButton({
   return (
     <button
       type={type}
+      {...props}
       style={{
         background: backgroundColor || "#6900ef",
         color: textColor || "#fff",
