@@ -1,12 +1,49 @@
 @import "tailwindcss";
 
-/* For modern browsers */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #8B7B9B #292433; /* thumb color, track color */
+:root {
+  /* Primary Brand (Purple) */
+  --vc-primary: #6f4bd6;
+  --vc-primary-hover: #5c3bd1;
+  --vc-primary-light: #8b5cf6;
+
+  /* Backgrounds */
+  --vc-app-bg: #0b1f2a;
+  --vc-card-bg: #ffffff;
+  --vc-glass-bg: rgba(255, 255, 255, 0.1);
+
+  /* Gradients */
+  --vc-left-gradient-from: #40207a;
+  --vc-left-gradient-via: #6b3fd6;
+  --vc-left-gradient-to: #8b5cf6;
+
+  /* Text Colors */
+  --vc-text-primary: #111827;
+  --vc-text-secondary: #6b7280;
+  --vc-text-muted: #9ca3af;
+  --vc-text-white: #ffffff;
+
+  /* Borders & Dividers */
+  --vc-border-light: #e5e7eb;
+
+  /* Status Colors */
+  --vc-success: #22c55e;
+  --vc-error: #ef4444;
+  --vc-warning: #f59e0b;
+
+  /* Shadows */
+  --vc-shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.45);
+  --vc-shadow-card: 0 25px 60px rgba(0, 0, 0, 0.15);
+
+  /* Radius */
+  --vc-radius-lg: 26px;
+  --vc-radius-md: 14px;
 }
 
-/* For WebKit browsers (Chrome, Edge, Safari) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #8b7b9b #292433;
+}
+
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -18,12 +55,24 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #8B7B9B;
+  background-color: #8b7b9b;
   border-radius: 8px;
-  border: 2px solid #292433; /* adds space around thumb */
+  border: 2px solid #292433;
   transition: background-color 0.3s ease;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #9d8cad; /* slightly lighter shade on hover */
+  background-color: #9d8cad;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0 1000px #fafafa inset !important;
+  box-shadow: 0 0 0 1000px #fafafa inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+  caret-color: #000;
 }

@@ -99,6 +99,8 @@ const InitialRedirect = () => {
 //   } else {
 //     return <Navigate to="/not-authorized" replace />;
 //   }
+
+    return null;
 };
 
 export default InitialRedirect;
