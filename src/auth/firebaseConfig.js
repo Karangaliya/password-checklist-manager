@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCWysf9XnPGxAQ_MZKvLwcPrNfPm0_7Ews",
+  apiKey: process.env.SECRET_VALUE,
   authDomain: "password-and-checklist-manager.firebaseapp.com",
   projectId: "password-and-checklist-manager",
   storageBucket: "password-and-checklist-manager.firebasestorage.app",
